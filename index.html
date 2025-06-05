@@ -1,0 +1,819 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Col de L'EST - Roulez, Balade automobile</title>
+    <meta name="description" content="Join our growing rally community for epic adventures across Europe">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+
+            /* Styles existants conservés */
+            html {
+                scroll-behavior: smooth;
+            }
+            header, main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            }
+            
+           
+            header a{
+                font-size: 22px;
+            }
+
+            .glass-morphism {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .gradient-text {
+                position: relative;
+                background: linear-gradient(135deg, #14a338, #344139);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .gradient-text::before {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                color: transparent;
+                text-shadow: 
+                    0 0 20px #14a338,
+                    0 0 15px #14a338,
+                    0 0 10px #14a338,
+                    0 0 5px #14a338;
+                background: none;
+                
+                -webkit-text-fill-color: initial;
+            }
+
+            .gradient-text2 {
+                position: relative;
+                background: linear-gradient(135deg, #14a338, #344139);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                filter: drop-shadow(0 0 30px #9ac5a46e) 
+                        drop-shadow(0 0 25px #9ac5a46e) ;
+            }
+
+            .hero-bg {
+                background-image: url('1.jpg');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                /* Optimisation pour mobiles */
+                background-attachment: scroll; /* Évite les problèmes de performance sur iOS */
+            }
+
+            .hero-bg h1 {
+                margin-top: 10%; /* Réduit pour mobile */
+            }
+
+            .scroll-indicator {
+                animation: bounce 2s infinite;
+            }
+
+            @keyframes bounce {
+                0%, 20%, 53%, 80%, 100% {
+                    transform: translate3d(0,0,0);
+                }
+                40%, 43% {
+                    transform: translate3d(0,-30px,0);
+                }
+                70% {
+                    transform: translate3d(0,-15px,0);
+                }
+                90% {
+                    transform: translate3d(0,-4px,0);
+                }
+            }
+
+            .card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            }
+
+            .card {
+                transition: all 0.3s ease;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: none;
+            }
+
+            .mobile-menu.active {
+                display: block;
+            }
+
+            .toast {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                opacity: 0;
+                transform: translateY(-100px);
+                transition: all 0.3s ease;
+            }
+
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            
+
+            /* OPTIMISATIONS SPÉCIFIQUES POUR IPHONE */
+
+            /* Styles pour iPhone et petits écrans */
+            @media (max-width: 480px) {
+                .hero-bg h1 {
+                    margin-top: 5%;
+                }
+                
+                /* Ajustement des tailles de texte pour iPhone */
+                .hero-bg h1 {
+                    font-size: 2.5rem !important; /* Plus petit que text-5xl */
+                }
+                
+                .gradient-text2 {
+                    font-size: 3rem !important; /* Plus petit que text-7xl */
+                    line-height: 1.1;
+                    margin-top: 0.5rem;
+                }
+                
+                .hero-bg h2 {
+                    font-size: 1.5rem !important; /* Plus petit que text-4xl */
+                    margin-bottom: 3rem !important;
+                }
+                
+                /* Boutons adaptés pour iPhone */
+                .hero-buttons {
+                    flex-direction: column;
+                    gap: 1rem;
+                    width: 100%;
+                    padding: 0 1rem;
+                }
+                
+                .hero-buttons button {
+                    width: 100%;
+                    padding: 1rem;
+                    font-size: 1rem;
+                    text-align: center;
+                }
+                
+                /* Statistiques adaptées */
+                .hero-stats {
+                    margin-top: 2rem;
+                    gap: 1.5rem;
+                    max-width: 100%;
+                }
+                
+                .hero-stats .stat-number {
+                    font-size: 1.875rem; /* Plus petit que text-3xl */
+                }
+                
+                .hero-stats .stat-label {
+                    font-size: 0.75rem;
+                }
+                
+                /* Indicateur de scroll adapté */
+                .scroll-indicator {
+                    bottom: 1rem;
+                    transform: scale(0.8);
+                }
+            }
+            /* NOUVELLES RÈGLES POUR LA SECTION STATS - OPTIMISATION IPHONE */
+
+            /* Styles généraux pour la section stats */
+            .stats-section {
+                min-height: 140vh;
+                padding: 2rem 0;
+                    background-color: #000000; /* Fond noir comme l'original */
+                /* Ou utilisez votre couleur de fond habituelle */
+            }
+
+
+            /* Styles du bouton retour en haut */
+        #scrollToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            z-index: 1000;
+        }
+
+        #scrollToTop.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        #scrollToTop:hover {
+            background: linear-gradient(135deg, #059669, #10b981);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        #scrollToTop:active {
+            transform: translateY(0);
+        }
+
+        /* Animation de la flèche */
+        #scrollToTop::before {
+            content: '↑';
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Version alternative avec SVG */
+        .arrow-svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+</style>
+</head>
+
+<body class=" scroll-smooth min-h-screen bg-white">
+    <!-- Toast for notifications -->
+    <div id="toast" class="toast">
+        <div id="toast-content"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="absolute top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
+        <div class="container mx-1 px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <img src="logo png blanc.png" alt="Logo" class="h-16 w-16">
+                    <span class="text-2xl font-bold text-white">Col de L'EST</span>
+                </div>
+                
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white/90 hover:text-white transition-colors">Evènements</a>
+                    <a href="Gallerie.html" class="text-white/90 hover:text-white transition-colors">Gallerie</a>
+                    <a href="Contact.html" class="text-white/90 hover:text-white transition-colors">Contact</a>
+                </nav>
+                
+                <div class="hidden md:flex items-center space-x-4">
+                    <button onclick="scrollToRegistration()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2 rounded-md transition-colors">
+                        S'inscrire pour notre prochain rally
+                    </button>
+                </div>
+                
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="mobile-menu" class="mobile-menu md:hidden mt-4 pb-4 border-t border-white/10 pt-4">
+                <nav class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-white/90 hover:text-white transition-colors">Evènements</a>
+                    <a href="Gallerie.html" class="text-white/90 hover:text-white transition-colors">Gallerie</a>
+                    <a href="Contact.html" class="text-white/90 hover:text-white transition-colors">Contact</a>
+                    <div class="pt-4">
+                        <button onclick="scrollToRegistration()" class="bg-emerald-700 hover:bg-red-700 text-white w-full py-2 rounded-md transition-colors">
+                            S'inscrire pour notre prochain Rallye
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-bg relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-black/40"></div>
+   
+    <div class="relative z-10 text-center max-w-6xl mx-auto px-4">
+        <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            <span class="gradient-text2 block mt-8 text-8xl md:text-6xl" data-text="Roulez, admirez, vibrez,">Roulez, admirez, vibrez,</span>
+            <h2 class="text-6xl md:text-4xl font-bold text-white mb-20 leading-tight">L'Est comme vous ne l'avez jamais conduit !</h2>
+        </h1>
+       
+        <!-- Boutons avec classes optimisées pour mobile -->
+        <div class="hero-buttons flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
+            <button onclick="scrollToRegistration()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-8 py-4 text-lg rounded-md transition-colors group w-full sm:w-auto">
+                Notre prochain rally
+                <svg class="inline ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </button>
+           
+            <button onclick="openInNewTab('https://www.youtube.com/watch?v=dQw4w9WgXcQ')" class="border border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg rounded-md glass-morphism transition-colors group w-full sm:w-auto">
+                Retour en Image sur notre 1ère édition
+            </button>
+        </div>
+       
+        <!-- Statistiques avec classes optimisées -->
+        <div class="hero-stats mt-12 grid grid-cols-3 gap-8 max-w-md mx-auto px-4">
+            <div class="text-center">
+                <div class="stat-number text-3xl font-bold text-white">1</div>
+                <div class="stat-label text-white/70 text-sm">Rallye</div>
+            </div>
+            <div class="text-center">
+                <div class="stat-number text-3xl font-bold text-white">12</div>
+                <div class="stat-label text-white/70 text-sm">Participants</div>
+            </div>
+            <div class="text-center">
+                <div class="stat-number text-3xl font-bold text-white">1</div>
+                <div class="stat-label text-white/70 text-sm">Pays traversé</div>
+            </div>
+        </div>
+    </div>
+   
+    <!--<div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white scroll-indicator">
+        <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+            <div class="w-1 h-3 bg-white rounded-full mt-2"></div>
+        </div>
+    </div>-->
+</section>
+
+    <!-- index.html -->
+        <div id="rallye-section"></div>
+
+    <!-- à ajouter à l'avenir-->
+    
+    <!-- Stats Section -->
+<section class="stats-section h-screen md text-white flex items-center mb-8 ">
+    <div class="container mx-auto px-4 mb-12">
+        <div class="text-center mb-12">
+            <h2 class="stats-title text-6xl md:text-7xl font-bold mb-6 mt-12">
+                C'est que <span class="gradient-text">le début de l'AVENTURE</span>
+            </h2>
+            <p class="stats-description text-xl text-white/80 max-w-2xl mx-auto">
+                À peine sortis de notre première édition nous planifions déjà la suite! 
+                Rejoignez-nous pour créer ensemble quelque chose d'<strong>EXCEPTIONNEL</strong>.
+            </p>
+        </div>
+        <div class="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <div class="stat-card text-center group">
+                <div class="stat-icon inline-flex items-center justify-center w-16 h-16 mb-4 bg-emerald-700 rounded-full group-hover:scale-110 transition-transform duration-300">
+                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                </div>
+                <div class="stat-number text-3xl font-bold mb-2">1</div>
+                <div class="stat-title text-xl font-semibold mb-1">Balade réalisée</div>
+                <div class="stat-subtitle text-gray-400 text-sm">On est qu'au début de l'aventure</div>
+            </div>
+            <div class="stat-card text-center group">
+                <div class="stat-icon inline-flex items-center justify-center w-16 h-16 mb-4 bg-emerald-700 rounded-full group-hover:scale-110 transition-transform duration-300">
+                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <div class="stat-number text-3xl font-bold mb-2">12</div>
+                <div class="stat-title text-xl font-semibold mb-1">Premiers Participants</div>
+                <div class="stat-subtitle text-gray-400 text-sm">nous on fait confiance</div>
+            </div>
+            <div class="stat-card text-center group">
+                <div class="stat-icon inline-flex items-center justify-center w-16 h-16 mb-4 bg-emerald-700 rounded-full group-hover:scale-110 transition-transform duration-300">
+                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <div class="stat-number text-3xl font-bold mb-2">1</div>
+                <div class="stat-title text-xl font-semibold mb-1">Pays exploré</div>
+                <div class="stat-subtitle text-gray-400 text-sm">Et on compte pas <br> s'arrêter là</div>
+            </div>
+            <div class="stat-card text-center group">
+                <div class="stat-icon inline-flex items-center justify-center w-16 h-16 mb-4 bg-emerald-700 rounded-full group-hover:scale-110 transition-transform duration-300">
+                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                    </svg>
+                </div>
+                <div class="stat-number text-3xl font-bold mb-2">5.0/5</div>
+                <div class="stat-title text-xl font-semibold mb-1">Note</div>
+                <div class="stat-subtitle text-gray-400 text-sm">Un plaisir unanime !</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Registration Section -->
+    <section id="registration" class=" py-20 bg-white flex items-center mb-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    Faites partie d’une 
+                    <br><span class="gradient-text text-5x md:text-6xl">Communauté européenne</span>
+                    <br> de passionnées
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Rejoignez notre communauté grandissante de passionnés de rallye. 
+                    <strong>Inscrivez-vous dès maintenant</strong> pour nos prochains événements et recevez en avant-première 
+                    toutes les informations sur les dates, les parcours exclusifs et nos offres spéciales !
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <div>
+                    <div class="bg-white border rounded-lg shadow-lg h-full">
+                        <div class="p-6 border-b">
+                            <h3 class="text-2xl font-bold">Informations Prochains Rallye</h3>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div class="flex items-center space-x-4">
+                                <svg class="h-6 w-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-semibold">Date de déroulement</h4>
+                                    <p class="text-gray-600">courant 2025</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <svg class="h-6 w-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-semibold">Route</h4>
+                                    <p class="text-gray-600">À définir</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <svg class="h-6 w-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-semibold">Nombre de participants</h4>
+                                    <p class="text-gray-600">Limité à 20 participants</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <svg class="h-6 w-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0M15 17a2 2 0 104 0"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-semibold">Type de véhicules</h4>
+                                    <p class="text-gray-600">Sportives, supercars, hypercars, etc...</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Inclu avec:</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Roadbook du parcours avec coordonnées GPS</li>
+                                    <li>• Découverte du patrimoine et de la région</li>
+                                    <li>• Pauses dans des établissements de renom</li>
+                                    <li>• Support 24/24h par nos équipes</li>
+                                    <li>• Arrêts avec boissons comprises dans la formule</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="bg-white border rounded-lg shadow-lg">
+                        <div class="p-6 border-b">
+                            <h3 class="text-2xl font-bold">Signalez-nous votre intérêt</h3>
+                        </div>
+                        <div class="p-6">
+                            <form id="registration-form">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                                        <input type="text" id="firstName" name="firstName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-700">
+                                    </div>
+                                    <div>
+                                        <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                                        <input type="text" id="lastName" name="lastName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-700">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                                    <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-700 mb-3">
+                                </div>
+
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Numéro de téléphone</label>
+                                    <input type="tel" id="phone" name="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-700 mb-3">
+                                </div>
+
+                                <div>
+                                    <label for="carModel" class="block text-sm font-medium text-gray-700 mb-1">Modèle de voiture *</label>
+                                    <input type="text" id="carModel" name="carModel" placeholder="e.g., BMW M3, Porsche 911, Honda Civic..." required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-700  mb-3">
+                                </div>
+
+                                <div>
+                                    <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message additionnel</label>
+                                    <textarea id="message" name="message" rows="4" placeholder="Parlez nous un peu de vous, votre voiture, vos attentes ou des questions qui vous trôtes..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-700 resize-none mb-3"></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-3 rounded-md transition-colors font-medium">
+                                    Soumettre
+                                </button>
+                            </form>
+
+                            <!-- Iframe pour empêcher la redirection -->
+                            <iframe name="hidden-iframe" style="display:none;"></iframe>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Bouton retour en haut -->
+    <button id="scrollToTop" title="Retour en haut"></button>
+
+    <script>
+        // Récupération du bouton
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        // Fonction pour afficher/masquer le bouton
+        function toggleScrollButton() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        }
+
+        // Fonction pour remonter en haut
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Écouteurs d'événements
+        window.addEventListener('scroll', toggleScrollButton);
+        scrollToTopBtn.addEventListener('click', scrollToTop);
+
+        // Vérification initiale au chargement de la page
+        toggleScrollButton();
+    </script>
+
+
+        <!-- Footer -->
+        <footer class="bg-black text-gray-400 py-16 px-6">
+        <div class="max-w-7xl mx-auto space-y-12">
+            
+            <!-- Logo & Description -->
+            <div class="flex flex-col md:flex-row md:justify-between items-center gap-6 text-center md:text-left">
+            <div>
+                <h2 class="text-2xl font-bold text-white tracking-wide">Col de L'EST</h2>
+                <p class="mt-2 text-sm max-w-md">
+                L'expérience automobile moderne sur les plus belles routes d’Alsace et des Vosges.
+                </p>
+            </div>
+
+            <!-- Socials -->
+            <div class="flex items-center gap-4">
+                <a href="#" aria-label="Facebook" class="hover:text-white transition">
+                <i class="fab fa-facebook-f text-xl"></i>
+                </a>
+                <a href="#" aria-label="Instagram" class="hover:text-white transition">
+                <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="#" aria-label="LinkedIn" class="hover:text-white transition">
+                <i class="fab fa-linkedin-in text-xl"></i>
+                </a>
+                <a href="#" aria-label="TikTok" class="hover:text-white transition">
+                <i class="fab fa-tiktok text-xl"></i>
+                </a>
+            </div>
+            </div>
+
+            <!-- Links -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h3 class="text-white font-semibold mb-4">Nos Balades</h3>
+                <ul class="space-y-2">
+                <li><a href="#" class="hover:text-white transition">Cols des Vosges</a></li>
+                <li><a href="#" class="hover:text-white transition"> ************** </a></li>
+                <li><a href="#" class="hover:text-white transition"> ************** </a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold mb-4">La Communauté</h3>
+                <ul class="space-y-2">
+                <li><a href="#" class="hover:text-white transition">Événements</a></li>
+                <li><a href="Gallerie.html" class="hover:text-white transition">Photos des éditions</a></li>
+                <li><a href="#" class="hover:text-white transition">Partenaires</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold mb-4">À propos</h3>
+                <ul class="space-y-2">
+                <li><a href="#" class="hover:text-white transition">Notre vision</a></li>
+                <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                <li><a href="#" class="hover:text-white transition">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold mb-4">Newsletter</h3>
+                <form class="flex flex-col space-y-2">
+                <input type="email" placeholder="Votre email" class="px-3 py-2 bg-gray-800 text-white placeholder-gray-500 rounded">
+                <button class="bg-emerald-700 hover:bg-emerald-800 text-white py-2 rounded transition">S’inscrire</button>
+                </form>
+            </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-center text-sm pt-6 border-t border-gray-700">
+            &copy; <span id="year"></span> Col de L'EST. Tous droits réservés.
+            </div>
+        </div>
+        </footer>
+
+        <!-- Font Awesome CDN -->
+        <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+        <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        </script>
+
+
+ 
+
+    <!-- JavaScript -->
+    <script>
+        // Fonction pour gérer le menu mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            
+            // Toggle de la classe active
+            mobileMenu.classList.toggle('active');
+            hamburgerIcon.classList.toggle('active');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            
+            // Clic sur le bouton hamburger
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMobileMenu();
+            });
+
+            // Fermer le menu quand on clique sur un lien
+            const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const hamburgerIcon = document.getElementById('hamburger-icon');
+                    mobileMenu.classList.remove('active');
+                    hamburgerIcon.classList.remove('active');
+                });
+            });
+
+            // Fermer le menu quand on clique ailleurs
+            document.addEventListener('click', function(e) {
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                
+                if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    const hamburgerIcon = document.getElementById('hamburger-icon');
+                    mobileMenu.classList.remove('active');
+                    hamburgerIcon.classList.remove('active');
+                }
+            });
+        });
+
+        // Scroll to registration section
+        function scrollToRegistration() {
+            document.getElementById('registration').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Show toast notification
+        function showToast(title, message) {
+            const toast = document.getElementById('toast');
+            const content = document.getElementById('toast-content');
+            
+            content.innerHTML = `
+                <div class="font-semibold">${title}</div>
+                <div class="text-sm opacity-90">${message}</div>
+            `;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // Registration form submission
+        document.getElementById('registration-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Empêche le rechargement de la page
+
+            const formData = new FormData(this);
+            const firstName = formData.get('firstName');
+            const lastName = formData.get('lastName');
+            const email = formData.get('email');
+
+            // On teste bien les bonnes variables ici :
+            if (firstName && lastName && email) {
+                fetch('https://formspree.io/f/mrbkgqpp', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        showToast('Intérêt signalé!', "Nous reviendrons vers vous très prochainement pour vous communiquer les informations sur la prochaine édition!");
+                        this.reset(); // Nettoie le formulaire
+                    } else {
+                        showToast("Erreur", "Une erreur s'est produite. Merci de réessayer.");
+                    }
+                }).catch(error => {
+                    console.error(error);
+                    showToast("Erreur", "Impossible d'envoyer le formulaire.");
+                });
+            } else {
+                showToast("Champs manquants", "Merci de remplir tous les champs requis.");
+            }
+        });
+
+
+        // Newsletter form submission
+        document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('newsletter-email').value;
+            
+            if (email) {
+                showToast('Welcome to the adventure!', "You'll be among the first to hear about our upcoming rallies and exclusive early bird offers.");
+                this.reset();
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        function openInNewTab(url) {
+            window.open(url, '_blank');
+        }
+
+    </script>
+</body>
+</html>

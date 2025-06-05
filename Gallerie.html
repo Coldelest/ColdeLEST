@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Col de L'EST - Galerie Photo</title>
+    <meta name="description" content="Découvrez nos photos de rallye et téléchargez-les">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        header, main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #14a338, #344139);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text2 {
+            background: linear-gradient(135deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        header a {
+            font-size: 21px;
+        }
+
+        /* Gallery specific styles */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: end;
+            padding: 1.5rem;
+        }
+
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-info {
+            color: white;
+            width: 100%;
+        }
+
+        .download-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* Modal styles - Version responsive améliorée */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 95vw;
+            max-height: 95vh;
+            width: auto;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+            z-index: 1001;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Bouton de téléchargement modal - Position responsive */
+        .modal-download-btn {
+            position: absolute;
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 1001;
+            transition: background 0.3s ease;
+            width: 8vh;
+            height: 8vh;
+        }
+
+        .modal-download-btn:hover {
+            background: #059669;
+        }
+
+        /* Position en haut à droite pour écrans > 780px */
+        @media (min-width: 781px) {
+            .modal-close {
+                position: absolute;
+                top: 10px;  /* Au-dessus de l'image */
+                right: 10px;    /* Aligné à droite de l'image */
+                background: rgba(0, 0, 0, 0.377);
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.3s ease;
+                z-index: 1001;
+            }
+            
+            .modal-download-btn {
+                top: 10px;
+                left: 10px; /* Décalé vers la gauche du bouton fermer */
+                
+            }
+        }
+
+        /* Position en bas au centre pour écrans <= 780px */
+        @media (max-width: 780px) {
+            .modal-close {
+                top: 20px;
+                right: 20px;
+            }
+            
+            .modal-download-btn {
+                top: 10px;
+                left: 10px;
+                position: absolute;
+            }
+        }
+
+        /* Ajustements pour très petits écrans */
+        @media (max-width: 480px) {
+            .modal-close {
+                position: absolute;
+                top: 10px;  /* Au-dessus de l'image */
+                right: 10px;    /* Aligné à droite de l'image */
+                background: rgba(0, 0, 0, 0.7);
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.3s ease;
+                z-index: 1001;
+            }
+            
+            .modal-download-btn {
+                bottom: 15px;
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+        }
+
+        /* Styles pour les boutons de navigation (flèches) */
+        .modal-nav {
+            position: fixed;
+            width: 8vh;
+            height: 8vh;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            font-size: 24px;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            user-select: none;
+        }
+
+        .modal-nav:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-nav:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .modal-nav.prev {
+            left: 20px;
+        }
+
+        .modal-nav.next {
+            right: 20px;
+        }
+
+        /* Responsive pour mobile - Navigation */
+        @media (max-width: 768px) {
+            .modal-nav {
+                font-size: 20px;
+                padding: 12px 16px;
+            }
+            
+            .modal-nav.prev {
+                left: 20px;
+            }
+            
+            .modal-nav.next {
+                right: 20px;
+            }
+        }
+
+        /* Masquer les flèches sur très petits écrans si nécessaire */
+        @media (max-width: 480px) {
+            .modal-nav {
+                font-size: 18px;
+                padding: 10px 14px;
+            }
+        }
+
+        /* Email Modal Styles */
+        .email-modal-content {
+            background: #1f2937;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .email-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .email-modal-close:hover {
+            color: white;
+        }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media ( min-width: 480px ) {
+            .modal {
+                padding: 5px;
+            }
+            
+            .modal-content {
+                max-width: 60%;
+                max-height: 100vh;
+            }
+            
+            
+            
+            .modal-content img {
+                max-width: 90vh;
+                max-height: 90vh;
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            }
+
+        }
+
+        /* Styles du bouton retour en haut */
+        #scrollToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            z-index: 1000;
+        }
+
+        #scrollToTop.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        #scrollToTop:hover {
+            background: linear-gradient(135deg, #059669, #10b981);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        #scrollToTop:active {
+            transform: translateY(0);
+        }
+
+        /* Animation de la flèche */
+        #scrollToTop::before {
+            content: '↑';
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Version alternative avec SVG */
+        .arrow-svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+    </style>
+
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("nOiS_pEwx9g0w6MGZ");
+        })();
+    </script>
+</head>
+
+<body class="scroll-smooth min-h-screen bg-black">
+    <!-- Toast for notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Header -->
+    <header class="absolute top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
+        <div class="container mx-1 px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <img src="logo png blanc.png" alt="Logo" class="h-16 w-16">
+                    <span class="text-2xl font-bold text-white">Col de L'EST</span>
+                </div>
+                
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white/90 hover:text-white transition-colors">Evènements</a>
+                    <a href="Gallerie.html" class="text-white/90 hover:text-white transition-colors">Gallerie</a>
+                    <a href="Contact.html" class="text-white/90 hover:text-white transition-colors">Contact</a>
+                </nav>
+                
+                <div class="hidden md:flex items-center space-x-4">
+                    <button onclick="scrollToRegistration()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2 rounded-md transition-colors">
+                        S'inscrire pour notre prochain rally
+                    </button>
+                </div>
+                
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="mobile-menu" class="mobile-menu md:hidden mt-4 pb-4 border-t border-white/10 pt-4">
+                <nav class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-white/90 hover:text-white transition-colors">Evènements</a>
+                    <a href="Gallerie.html" class="text-white/90 hover:text-white transition-colors">Gallerie</a>
+                    <a href="Contact.html" class="text-white/90 hover:text-white transition-colors">Contact</a>
+                    <div class="pt-4">
+                        <button onclick="scrollToRegistration()" class="bg-emerald-700 hover:bg-red-700 text-white w-full py-2 rounded-md transition-colors">
+                            S'inscrire pour notre prochain Rallye
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-emerald-900">
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                <span class="gradient-text2">Galerie Photo</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8">
+                Revivez nos moments épiques et téléchargez vos photos favorites
+            </p>
+            <div class="scroll-indicator">
+                <svg class="w-8 h-8 mx-auto text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="photo-grid" id="photoGrid">
+                <!-- Photos will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Modal for full-size view -->
+    <div id="photoModal" class="modal">
+        <div class="modal-content m-auto my-90%">
+            <button class="modal-close mb-1" onclick="closeModal()" style="background: black; padding: 0.5rem; border: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+
+            <button class="modal-download-btn w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full flex items-center justify-center" onclick="requestPhotoFromModal()" id="modalDownloadBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-6-6m6 6l6-6" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 21h16" />
+                </svg>
+            </button>
+            
+            <button id="modalPrev" class="modal-nav prev flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M16 4l-8 8 8 8" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+            </button>
+            <img id="modalImage" src="" alt="">
+            <button id="modalNext" class="modal-nav next flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M8 4l8 8-8 8" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Email Request Modal -->
+    <div id="emailModal" class="modal">
+        <div class="email-modal-content">
+            <button class="email-modal-close" onclick="closeEmailModal()">&times;</button>
+            <h3 class="text-2xl font-bold text-white mb-6">Recevoir la photo par email</h3>
+            <form id="emailForm" onsubmit="requestPhoto(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-300 mb-2 font-medium">Votre email :</label>
+                    <input type="email" id="userEmail" required 
+                           class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-emerald-500 focus:outline-none transition-colors">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-300 mb-2 font-medium">Message (optionnel) :</label>
+                    <textarea id="userMessage" 
+                              class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-emerald-500 focus:outline-none transition-colors" 
+                              rows="3" 
+                              placeholder="Ajoutez un message..."></textarea>
+                </div>
+                <button type="submit" id="submitBtn" 
+                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg transition-colors font-medium">
+                    <span id="submitText">Envoyer la demande</span>
+                    <span id="submitSpinner" class="loading-spinner hidden"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Photos stockées localement
+const photos = [
+    { id: 1, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/17_fqepip.jpg", title: "Rallye Col de L'EST - Photo 1" },
+    { id: 2, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901374/18_ghwlcw.jpg", title: "Rallye Col de L'EST - Photo 2" },
+    { id: 3, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/16_podvbf.jpg", title: "Rallye Col de L'EST - Photo 3" },
+    { id: 4, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/19_fltdg4.jpg", title: "Rallye Col de L'EST - Photo 4" },
+    { id: 5, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901372/14_f8psoy.jpg", title: "Rallye Col de L'EST - Photo 5" },
+    { id: 6, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/15_q3pkoj.jpg", title: "Rallye Col de L'EST - Photo 6" },
+    { id: 7, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/12_gwncy1.jpg", title: "Rallye Col de L'EST - Photo 7" },
+    { id: 8, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/10_ojio7j.jpg", title: "Rallye Col de L'EST - Photo 8" },
+    { id: 9, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/13_uajstj.jpg", title: "Rallye Col de L'EST - Photo 9" },
+    { id: 10, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/11_o8u86t.jpg", title: "Rallye Col de L'EST - Photo 10"},
+    { id: 11, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/20_xt2dkm.jpg", title: "Rallye Col de L'EST - Photo 11"},
+    { id: 12, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/21_lyu1gv.jpg", title: "Rallye Col de L'EST - Photo 12"},
+    { id: 13, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/22_ylockz.jpg", title: "Rallye Col de L'EST - Photo 13"},
+    { id: 14, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/23_b0nmye.jpg", title: "Rallye Col de L'EST - Photo 14"},
+    { id: 15, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/25_aaqx7m.jpg", title: "Rallye Col de L'EST - Photo 15"},
+    { id: 16, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/26_juulhu.jpg", title: "Rallye Col de L'EST - Photo 16"},
+    { id: 17, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/24_b0n8ql.jpg", title: "Rallye Col de L'EST - Photo 17"}
+];
+
+let currentPhotoId = null;
+let currentModalPhotoSrc = null;
+
+// Initialise la galerie
+function initGallery() {
+    renderPhotos(photos);
+    setupEventListeners();
+}
+
+// Configuration des event listeners
+function setupEventListeners() {
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+    }
+
+    // Fermer les modals en cliquant à l'extérieur
+    document.getElementById('photoModal').addEventListener('click', (e) => {
+        if (e.target.id === 'photoModal') {
+            closeModal();
+        }
+    });
+
+    
+    // Échapper pour fermer les modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            // Si le modal email est ouvert, fermer seulement le modal email
+            const emailModal = document.getElementById('emailModal');
+            if (emailModal.classList.contains('active')) {
+                closeEmailModal();
+            } else {
+                // Sinon fermer le modal photo
+                closeModal();
+            }
+        }
+    });
+
+    // Boutons suivant / précédent dans le modal
+    const prevBtn = document.getElementById('modalPrev');
+    const nextBtn = document.getElementById('modalNext');
+
+    if (prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Pour éviter la fermeture du modal
+            showPrevPhoto();
+        });
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showNextPhoto();
+        });
+    }
+
+}
+
+// Affiche les photos dans la grille
+function renderPhotos(photosToShow) {
+    const grid = document.getElementById('photoGrid');
+    grid.innerHTML = '';
+
+    photosToShow.forEach(photo => {
+        const photoElement = document.createElement('div');
+        photoElement.className = 'photo-item card';
+        photoElement.innerHTML = `
+            <img src="${photo.src}" alt="${photo.title}" loading="lazy">
+            <div class="photo-overlay">
+                <div class="photo-info">
+                    <h3 class="text-lg font-bold">Col de L'EST</h3>
+                    <p class="text-sm text-gray-300">Première édition</p>
+                    <button class="download-btn" onclick="event.stopPropagation(); openEmailModal(${photo.id})">
+                        📧 Recevoir par email
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Clic sur la photo ouvre le modal
+        photoElement.addEventListener('click', () => {
+            openModal(photo.src, photo.id);
+        });
+
+        grid.appendChild(photoElement);
+    });
+}
+
+// Ouvre le modal de la photo en grand
+function openModal(src, photoId) {
+    const modal = document.getElementById('photoModal');
+    const modalImage = document.getElementById('modalImage');
+    modalImage.src = src;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Stocker l'ID de la photo actuelle pour le bouton de téléchargement
+    currentModalPhotoSrc = src;
+    const photo = photos.find(p => p.src === src);
+    if (photo) {
+        currentPhotoId = photo.id;
+    }
+}
+
+// Ferme le modal de la photo
+function closeModal() {
+    const modal = document.getElementById('photoModal');
+    modal.classList.remove('active');
+    document.getElementById('modalImage').src = '';
+    document.body.style.overflow = 'auto';
+    currentModalPhotoSrc = null;
+    currentPhotoId = null;
+}
+
+// Fonction modifiée pour demander la photo depuis le modal (garde le modal image ouvert)
+function requestPhotoFromModal() {
+    if (currentPhotoId) {
+        // NE PAS fermer le modal photo, juste ouvrir le modal email par-dessus
+        openEmailModal(currentPhotoId);
+    }
+}
+
+// Ouvre le modal de demande email
+function openEmailModal(photoId) {
+    currentPhotoId = photoId;
+    const emailModal = document.getElementById('emailModal');
+    emailModal.classList.add('active');
+    // Ne pas modifier document.body.style.overflow car le modal photo est déjà ouvert
+    
+    // Focus sur le champ email
+    setTimeout(() => {
+        document.getElementById('userEmail').focus();
+    }, 100);
+}
+
+// Ferme le modal de demande email
+function closeEmailModal() {
+    const emailModal = document.getElementById('emailModal');
+    emailModal.classList.remove('active');
+    document.getElementById('emailForm').reset();
+    // Ne pas remettre overflow à 'auto' si le modal photo est encore ouvert
+    const photoModal = document.getElementById('photoModal');
+    if (!photoModal.classList.contains('active')) {
+        document.body.style.overflow = 'auto';
+    }
+    // Ne pas remettre currentPhotoId à null car le modal photo est encore ouvert
+    
+    // Reset du bouton
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    
+    submitBtn.classList.remove('loading');
+    submitText.classList.remove('hidden');
+    submitSpinner.classList.add('hidden');
+}
+
+// Gère la soumission du formulaire d'envoi par email
+function requestPhoto(event) {
+    event.preventDefault();
+
+    // Vérification qu'EmailJS est chargé
+    if (typeof emailjs === 'undefined') {
+        showToast("Erreur : EmailJS non chargé. Rechargez la page.", "error");
+        return;
+    }
+
+    const email = document.getElementById('userEmail').value.trim();
+    const message = document.getElementById('userMessage').value.trim();
+    const photo = photos.find(p => p.id === currentPhotoId);
+
+    if (!photo) {
+        showToast("Erreur : photo introuvable.", "error");
+        return;
+    }
+
+    // Validation email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showToast("Veuillez entrer un email valide.", "error");
+        return;
+    }
+
+    // Loading state
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    
+    submitBtn.classList.add('loading');
+    submitText.classList.add('hidden');
+    submitSpinner.classList.remove('hidden');
+
+    // Envoi avec EmailJS
+    emailjs.send(
+        "service_1s5r4by",
+        "template_5p3alt9",
+        {
+            user_email: email,
+            user_message: message || "Aucun message spécifique",
+            photo_url: photo.src,
+            photo_title: photo.title,
+            from_name: email,
+            to_name: "Équipe Col de L'EST"
+        }
+    )
+    .then((response) => {
+        console.log('EmailJS Success:', response);
+        showToast("Photo envoyée par email avec succès ! ✅", "success");
+        closeEmailModal();
+    })
+    .catch((error) => {
+        console.error("Erreur EmailJS :", error);
+        showToast("Erreur lors de l'envoi. Veuillez réessayer.", "error");
+        
+        // Reset loading state
+        submitBtn.classList.remove('loading');
+        submitText.classList.remove('hidden');
+        submitSpinner.classList.add('hidden');
+    });
+}
+        // Affiche un toast avec un message
+        function showToast(message, type = "info") {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            
+            // Couleurs selon le type
+            if (type === "success") {
+                toast.style.background = "rgba(16, 185, 129, 0.9)";
+            } else if (type === "error") {
+                toast.style.background = "rgba(239, 68, 68, 0.9)";
+            } else {
+                toast.style.background = "rgba(0, 0, 0, 0.8)";
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // Fonction pour rediriger vers une section d'une autre page
+        function scrollToRegistration() {
+            // Remplacez 'index.html' par le nom de votre page de destination
+            // Remplacez 'inscription' par l'ID de votre section cible
+            window.location.href = 'index.html#registration';
+        }
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            initGallery();
+        });
+    </script>
+
+    <!-- Bouton retour en haut -->
+    <button id="scrollToTop" title="Retour en haut"></button>
+
+    <script>
+        // Récupération du bouton
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        // Fonction pour afficher/masquer le bouton
+        function toggleScrollButton() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        }
+
+        // Fonction pour remonter en haut
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Écouteurs d'événements
+        window.addEventListener('scroll', toggleScrollButton);
+        scrollToTopBtn.addEventListener('click', scrollToTop);
+
+        // Vérification initiale au chargement de la page
+        toggleScrollButton();
+
+
+        // bouton gauche droite 
+
+        function showNextPhoto() {
+            if (currentPhotoId === null) return;
+
+            const currentIndex = photos.findIndex(p => p.id === currentPhotoId);
+            const nextIndex = (currentIndex + 1) % photos.length;
+            const nextPhoto = photos[nextIndex];
+
+            openModal(nextPhoto.src, nextPhoto.id);
+        }
+
+        function showPrevPhoto() {
+            if (currentPhotoId === null) return;
+
+            const currentIndex = photos.findIndex(p => p.id === currentPhotoId);
+            const prevIndex = (currentIndex - 1 + photos.length) % photos.length;
+            const prevPhoto = photos[prevIndex];
+
+            openModal(prevPhoto.src, prevPhoto.id);
+        }
+
+
+
+    </script>
+
+    <!-- Footer -->
+    <footer class="bg-black text-gray-400 py-16 px-6">
+        <div class="max-w-7xl mx-auto space-y-12">
+            
+            <!-- Logo & Description -->
+            <div class="flex flex-col md:flex-row md:justify-between items-center gap-6 text-center md:text-left">
+            <div>
+                <h2 class="text-2xl font-bold text-white tracking-wide">Col de L'EST</h2>
+                <p class="mt-2 text-sm max-w-md">
+                L'expérience automobile moderne sur les plus belles routes d’Alsace et des Vosges.
+                </p>
+            </div>
+
+            <!-- Socials -->
+            <div class="flex items-center gap-4">
+                <a href="#" aria-label="Facebook" class="hover:text-white transition">
+                <i class="fab fa-facebook-f text-xl"></i>
+                </a>
+                <a href="#" aria-label="Instagram" class="hover:text-white transition">
+                <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="#" aria-label="LinkedIn" class="hover:text-white transition">
+                <i class="fab fa-linkedin-in text-xl"></i>
+                </a>
+                <a href="#" aria-label="TikTok" class="hover:text-white transition">
+                <i class="fab fa-tiktok text-xl"></i>
+                </a>
+            </div>
+            </div>
+
+            <!-- Links -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h3 class="text-white font-semibold mb-4">Nos Balades</h3>
+                <ul class="space-y-2">
+                <li><a href="#" class="hover:text-white transition">Cols des Vosges</a></li>
+                <li><a href="#" class="hover:text-white transition"> ************** </a></li>
+                <li><a href="#" class="hover:text-white transition"> ************** </a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold mb-4">La Communauté</h3>
+                <ul class="space-y-2">
+                <li><a href="#" class="hover:text-white transition">Événements</a></li>
+                <li><a href="Gallerie.html" class="hover:text-white transition">Photos des éditions</a></li>
+                <li><a href="#" class="hover:text-white transition">Partenaires</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold mb-4">À propos</h3>
+                <ul class="space-y-2">
+                <li><a href="#" class="hover:text-white transition">Notre vision</a></li>
+                <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                <li><a href="#" class="hover:text-white transition">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold mb-4">Newsletter</h3>
+                <form class="flex flex-col space-y-2">
+                <input type="email" placeholder="Votre email" class="px-3 py-2 bg-gray-800 text-white placeholder-gray-500 rounded">
+                <button class="bg-emerald-700 hover:bg-emerald-800 text-white py-2 rounded transition">S’inscrire</button>
+                </form>
+            </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-center text-sm pt-6 border-t border-gray-700">
+            &copy; <span id="year"></span> Col de L'EST. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
