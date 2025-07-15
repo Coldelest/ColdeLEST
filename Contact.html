@@ -200,7 +200,7 @@
             }
 
             .logo-text {
-                display: none;
+                min-width: 100%;
             }
         }
 
@@ -270,34 +270,40 @@
 
         /* Menu mobile avec animation */
         .mobile-menu {
-            position: absolute;
-            top: 100%;
+            position: fixed; /* ✅ nécessaire pour que le flou s'affiche partout */
+            top: 60px; /* ou top: 100% si tu veux qu'il parte du bas du header */
             left: 0;
             right: 0;
-            background-color: rgba(0, 0, 0, 0.4); /* noir avec 40% d’opacité */
+            
+            background-color: #0e0e0ecb;
             backdrop-filter: blur(6px); /* optionnel : effet de flou derrière */
             -webkit-backdrop-filter: blur(6px); /* compatibilité Safari */
-            border-radius: 0 0 16px 16px;
+            
+
+            border-radius:  16px 16px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-top: none;
+
             box-shadow: 
                 0 20px 40px rgba(0, 0, 0, 0.3),
                 0 8px 16px rgba(0, 0, 0, 0.2),
                 0 0 0 1px rgba(255, 255, 255, 0.05);
+
             padding: 0;
-            margin-top: 10px;
+            margin-top: 0; /* facultatif */
             max-height: 0;
             overflow: hidden;
             opacity: 0;
             transform: translateY(-20px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000; /* 🔒 pour garantir qu’il passe au-dessus */
         }
 
         .mobile-menu.active {
             max-height: 300px;
             opacity: 1;
             transform: translateY(0);
-            padding: 20px;
+            padding: 5px 20px 20px 20px;
         }
 
         .mobile-nav {
@@ -411,8 +417,18 @@
         /* Responsive Design */
         @media (max-width: 640px) {
             .floating-header {
-                height: 70px;
-                padding: 0 20px;
+                height: 50px;
+                padding: 0 15px;
+                background-color: rgba(0, 0, 0, 0.4); /* noir avec 40% d’opacité */
+                backdrop-filter: blur(6px); /* optionnel : effet de flou derrière */
+                -webkit-backdrop-filter: blur(6px); /* compatibilité Safari */
+                border-radius: 50px;
+                animation: none;
+                transform: translateY(0);
+                box-shadow: 
+                    0 20px 40px rgba(0, 0, 0, 0.3),
+                    0 8px 16px rgba(0, 0, 0, 0.2),
+                    0 0 0 1px rgba(255, 255, 255, 0.05);
             }
 
             .floating-header.scrolled {
@@ -849,7 +865,7 @@
 
         <nav class="header-center nav-desktop">
             <a href="index.html">Accueil</a>
-            <a href="Gallerie.html">Gallerie</a>
+            <a href="Gallerie.html">Galerie</a>
             <a href="Contact.html">Contact</a>
         </nav>
 
@@ -873,7 +889,7 @@
         <div id="mobile-menu" class="mobile-menu">
             <nav class="mobile-nav">
                 <a href="index.html">Évènements</a>
-                <a href="Gallerie.html">Gallerie</a>
+                <a href="Gallerie.html">Galerie</a>
                 <a href="Contact.html">Contact</a>
                 <button class="cta-button bouton-mobile" onclick="scrollToRegistration()">
                     S'inscrire pour notre prochain Rallye
