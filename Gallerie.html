@@ -959,14 +959,7 @@
             fill: currentColor;
         }
 
-        /* mobile menu css */
-        .mobile-menu {
-            display: none;
-        }
-
-        .mobile-menu.active {
-            display: block;
-        }
+        
     </style>
 
     <!-- EmailJS -->
@@ -1201,25 +1194,25 @@
 
     <script>
         // Photos stockées localement
-const photos = [
-    { id: 1, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/17_fqepip.jpg", title: "Rallye Col de L'EST - Photo 1" },
-    { id: 2, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901374/18_ghwlcw.jpg", title: "Rallye Col de L'EST - Photo 2" },
-    { id: 3, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/16_podvbf.jpg", title: "Rallye Col de L'EST - Photo 3" },
-    { id: 4, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/19_fltdg4.jpg", title: "Rallye Col de L'EST - Photo 4" },
-    { id: 5, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901372/14_f8psoy.jpg", title: "Rallye Col de L'EST - Photo 5" },
-    { id: 6, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/15_q3pkoj.jpg", title: "Rallye Col de L'EST - Photo 6" },
-    { id: 7, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/12_gwncy1.jpg", title: "Rallye Col de L'EST - Photo 7" },
-    { id: 8, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/10_ojio7j.jpg", title: "Rallye Col de L'EST - Photo 8" },
-    { id: 9, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/13_uajstj.jpg", title: "Rallye Col de L'EST - Photo 9" },
-    { id: 10, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/11_o8u86t.jpg", title: "Rallye Col de L'EST - Photo 10"},
-    { id: 11, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/20_xt2dkm.jpg", title: "Rallye Col de L'EST - Photo 11"},
-    { id: 12, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/21_lyu1gv.jpg", title: "Rallye Col de L'EST - Photo 12"},
-    { id: 13, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/22_ylockz.jpg", title: "Rallye Col de L'EST - Photo 13"},
-    { id: 14, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/23_b0nmye.jpg", title: "Rallye Col de L'EST - Photo 14"},
-    { id: 15, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/25_aaqx7m.jpg", title: "Rallye Col de L'EST - Photo 15"},
-    { id: 16, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/26_juulhu.jpg", title: "Rallye Col de L'EST - Photo 16"},
-    { id: 17, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/24_b0n8ql.jpg", title: "Rallye Col de L'EST - Photo 17"}
-];
+        const photos = [
+            { id: 1, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/17_fqepip.jpg", title: "Rallye Col de L'EST - Photo 1" },
+            { id: 2, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901374/18_ghwlcw.jpg", title: "Rallye Col de L'EST - Photo 2" },
+            { id: 3, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/16_podvbf.jpg", title: "Rallye Col de L'EST - Photo 3" },
+            { id: 4, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901373/19_fltdg4.jpg", title: "Rallye Col de L'EST - Photo 4" },
+            { id: 5, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901372/14_f8psoy.jpg", title: "Rallye Col de L'EST - Photo 5" },
+            { id: 6, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/15_q3pkoj.jpg", title: "Rallye Col de L'EST - Photo 6" },
+            { id: 7, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/12_gwncy1.jpg", title: "Rallye Col de L'EST - Photo 7" },
+            { id: 8, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/10_ojio7j.jpg", title: "Rallye Col de L'EST - Photo 8" },
+            { id: 9, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/13_uajstj.jpg", title: "Rallye Col de L'EST - Photo 9" },
+            { id: 10, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748901371/11_o8u86t.jpg", title: "Rallye Col de L'EST - Photo 10"},
+            { id: 11, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/20_xt2dkm.jpg", title: "Rallye Col de L'EST - Photo 11"},
+            { id: 12, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/21_lyu1gv.jpg", title: "Rallye Col de L'EST - Photo 12"},
+            { id: 13, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/22_ylockz.jpg", title: "Rallye Col de L'EST - Photo 13"},
+            { id: 14, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930380/23_b0nmye.jpg", title: "Rallye Col de L'EST - Photo 14"},
+            { id: 15, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/25_aaqx7m.jpg", title: "Rallye Col de L'EST - Photo 15"},
+            { id: 16, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/26_juulhu.jpg", title: "Rallye Col de L'EST - Photo 16"},
+            { id: 17, src: "https://res.cloudinary.com/du6pui52u/image/upload/v1748930924/24_b0n8ql.jpg", title: "Rallye Col de L'EST - Photo 17"}
+        ];
 
 let currentPhotoId = null;
 let currentModalPhotoSrc = null;
