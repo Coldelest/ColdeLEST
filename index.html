@@ -264,29 +264,33 @@
             transform: rotate(-135deg);
         }
 
-        /* Menu mobile avec animation */
         .mobile-menu {
-            position: absolute;
-            top: 100%;
+            position: fixed; /* ✅ nécessaire pour que le flou s'affiche partout */
+            top: 70px; /* ou top: 100% si tu veux qu'il parte du bas du header */
             left: 0;
             right: 0;
-            background-color: rgba(0, 0, 0, 0.4); /* noir avec 40% d’opacité */
-            backdrop-filter: blur(6px); /* optionnel : effet de flou derrière */
-            -webkit-backdrop-filter: blur(6px); /* compatibilité Safari */
+            
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+
             border-radius: 0 0 16px 16px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-top: none;
+
             box-shadow: 
                 0 20px 40px rgba(0, 0, 0, 0.3),
                 0 8px 16px rgba(0, 0, 0, 0.2),
                 0 0 0 1px rgba(255, 255, 255, 0.05);
+
             padding: 0;
-            margin-top: 10px;
+            margin-top: 0; /* facultatif */
             max-height: 0;
-            
+            overflow: hidden;
             opacity: 0;
             transform: translateY(-20px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000; /* 🔒 pour garantir qu’il passe au-dessus */
         }
 
         .mobile-menu.active {
