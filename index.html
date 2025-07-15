@@ -13,206 +13,642 @@
     <!-- Custom CSS -->
     <style>
 
-            /* Styles existants conservés */
-            html {
-                scroll-behavior: smooth;
+        /* Styles existants conservés */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Header flottant avec effet de lévitation */
+        .floating-header {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.4); /* noir avec 40% d’opacité */
+            backdrop-filter: blur(6px); /* optionnel : effet de flou derrière */
+            -webkit-backdrop-filter: blur(6px); /* compatibilité Safari */
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 8px 16px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .header-left,
+        .header-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-right {
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Le menu centré est positionné absolument au milieu */
+        .header-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 32px;
+        }
+
+        /* Mode discret lors du scroll */
+        .floating-header.scrolled {
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.4); /* noir avec 40% d’opacité */
+            backdrop-filter: blur(6px); /* optionnel : effet de flou derrière */
+            -webkit-backdrop-filter: blur(6px); /* compatibilité Safari */
+            border-radius: 50px;
+            animation: none;
+            transform: translateY(0);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 8px 16px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        /* Révélation au hover en mode discret */
+        .floating-header.scrolled:hover {
+            height: 80px;
+            border-radius: 16px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 8px 16px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            animation: headerFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes headerFloat {
+            0%, 100% {
+                transform: translateY(0px);
+                box-shadow: 
+                    0 20px 40px rgba(0, 0, 0, 0.3),
+                    0 8px 16px rgba(0, 0, 0, 0.2),
+                    0 0 0 1px rgba(255, 255, 255, 0.05);
             }
-            header, main {
+            50% {
+                transform: translateY(-5px);
+                box-shadow: 
+                    0 30px 60px rgba(0, 0, 0, 0.4),
+                    0 12px 24px rgba(0, 0, 0, 0.3),
+                    0 0 0 1px rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-container img {
+            height: 50px;
+            width: 50px;
+            filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+            transition: all 0.3s ease;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        /* Navigation desktop */
+        .nav-desktop {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-desktop a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            align-items: center;
+        }
+
+        .nav-desktop a:hover {
+            color: #10b981;
+            transform: translateY(-2px);
+        }
+
+        .nav-desktop a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #10b981, #059669);
+            transition: width 0.3s ease;
+        }
+
+        .nav-desktop a:hover::after {
+            width: 100%;
+        }
+
+        /* Bouton plus stylé */
+
+        /* Style normal du bouton */
+        .cta-button {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        @media screen and (max-width: 1050px) {
+            .cta-button .cta-text {
+                display: none;
+            }
+
+            .cta-button {
+                padding: 12px; /* Réduit le padding car il n'y a plus de texte */
+                min-width: auto;
+            }
+
+            .logo-text {
+                display: none;
+            }
+        }
+
+
+
+        /* Bouton hamburger avec animation */
+        .mobile-menu-btn {
+            display: none;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            position: relative;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            transform: rotate(0deg);
+            transition: 0.3s ease-in-out;
+        }
+
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: white;
+            border-radius: 2px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: 0.3s ease-in-out;
+        }
+
+        .hamburger span:nth-child(1) {
+            top: 6px;
+        }
+
+        .hamburger span:nth-child(2) {
+            top: 12px;
+        }
+
+        .hamburger span:nth-child(3) {
+            top: 18px;
+        }
+
+        /* Animation du hamburger vers X */
+        .mobile-menu-btn.active .hamburger span:nth-child(1) {
+            top: 12px;
+            transform: rotate(135deg);
+        }
+
+        .mobile-menu-btn.active .hamburger span:nth-child(2) {
+            opacity: 0;
+            left: -30px;
+        }
+
+        .mobile-menu-btn.active .hamburger span:nth-child(3) {
+            top: 12px;
+            transform: rotate(-135deg);
+        }
+
+        /* Menu mobile avec animation */
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.4); /* noir avec 40% d’opacité */
+            backdrop-filter: blur(6px); /* optionnel : effet de flou derrière */
+            -webkit-backdrop-filter: blur(6px); /* compatibilité Safari */
+            border-radius: 0 0 16px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: none;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 8px 16px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            padding: 0;
+            margin-top: 10px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-menu.active {
+            max-height: 300px;
+            opacity: 1;
+            transform: translateY(0);
+            padding: 20px;
+        }
+
+        .mobile-nav {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            }
-            
-           
-            header a{
-                font-size: 22px;
-            }
+            gap: 0;
+        }
 
-            .glass-morphism {
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-            }
+        .mobile-nav a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInLeft 0.4s ease forwards;
+        }
 
-            .gradient-text {
-                position: relative;
-                background: linear-gradient(135deg, #14a338, #344139);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
+        .mobile-nav a:nth-child(1) { animation-delay: 0.1s; }
+        .mobile-nav a:nth-child(2) { animation-delay: 0.2s; }
+        .mobile-nav a:nth-child(3) { animation-delay: 0.3s; }
 
-            .gradient-text::before {
-                content: attr(data-text);
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: -1;
-                color: transparent;
-                text-shadow: 
-                    0 0 20px #14a338,
-                    0 0 15px #14a338,
-                    0 0 10px #14a338,
-                    0 0 5px #14a338;
-                background: none;
-                
-                -webkit-text-fill-color: initial;
-            }
+        .mobile-nav a:last-child {
+            border-bottom: none;
+        }
 
-            .gradient-text2 {
-                position: relative;
-                background: linear-gradient(135deg, #14a338, #344139);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                filter: drop-shadow(0 0 30px #9ac5a46e) 
-                        drop-shadow(0 0 25px #9ac5a46e) ;
-            }
+        .mobile-nav a:hover {
+            color: #10b981;
+            transform: translateX(10px);
+        }
 
-            .hero-bg {
-                background-image: url('1.jpg');
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                /* Optimisation pour mobiles */
-                background-attachment: scroll; /* Évite les problèmes de performance sur iOS */
-            }
+        .mobile-nav .cta-button {
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideInUp 0.4s ease forwards;
+            animation-delay: 0.4s;
+        }
 
-            .hero-bg h1 {
-                margin-top: 10%; /* Réduit pour mobile */
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
+        }
 
-            .scroll-indicator {
-                animation: bounce 2s infinite;
-            }
-
-            @keyframes bounce {
-                0%, 20%, 53%, 80%, 100% {
-                    transform: translate3d(0,0,0);
-                }
-                40%, 43% {
-                    transform: translate3d(0,-30px,0);
-                }
-                70% {
-                    transform: translate3d(0,-15px,0);
-                }
-                90% {
-                    transform: translate3d(0,-4px,0);
-                }
-            }
-
-            .card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            }
-
-            .card {
-                transition: all 0.3s ease;
-            }
-
-            .hidden {
-                display: none;
-            }
-
-            .mobile-menu {
-                display: none;
-            }
-
-            .mobile-menu.active {
-                display: block;
-            }
-
-            .toast {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #10b981;
-                color: white;
-                padding: 16px 24px;
-                border-radius: 8px;
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-                opacity: 0;
-                transform: translateY(-100px);
-                transition: all 0.3s ease;
-            }
-
-            .toast.show {
+        @keyframes slideInUp {
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
 
+        /* Contenu principal */
+        .content {
+            margin-top: 140px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+        }
+
+        .content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .content p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .demo-section {
+            margin: 60px 0;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .demo-section h2 {
+            color: #10b981;
+            margin-bottom: 20px;
+        }
+
+        /* Cacher bouton desktop sur mobile */
+            @media (max-width: 640px) {
+            .bouton-desktop {
+                display: none;
+            }
+
+            .cta-button {
+                text-align: center;
+            }
+        }
+
+        /* Cacher bouton mobile sur desktop */
+            @media (min-width: 640px) {
+            .bouton-mobile {
+                display: none;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .floating-header {
+                height: 70px;
+                padding: 0 20px;
+            }
+
+            .floating-header.scrolled {
+                height: 50px;
+                padding: 0 15px;
+            }
+
+            .floating-header.scrolled:hover {
+                height: 70px;
+                padding: 0 20px;
+            }
+
+            .nav-desktop {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            /* Masquer le bouton CTA en mode normal ET discret sur mobile 
+            .cta-button {
+                display: none !important;
+            } */
+
+            /* Éléments plus petits en mode discret - MOBILE */
+            .logo-container img {
+                height: 40px;
+                width: 40px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .floating-header.scrolled .logo-container img {
+                height: 35px;
+                width: 35px;
+            }
+
+            .floating-header.scrolled .logo-text {
+                font-size: 18px;
+            }
+
+            .floating-header.scrolled:hover .logo-container img {
+                height: 40px;
+                width: 40px;
+            }
+
+            .floating-header.scrolled:hover .logo-text {
+                font-size: 20px;
+            }
+
+            .content h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+
+        ---------------------------------------------------------------------------------------------------------------------------------------------
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .gradient-text {
+            position: relative;
+            background: linear-gradient(135deg, #14a338, #344139);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            color: transparent;
+            text-shadow: 
+                0 0 20px #14a338,
+                0 0 15px #14a338,
+                0 0 10px #14a338,
+                0 0 5px #14a338;
+            background: none;
             
+            -webkit-text-fill-color: initial;
+        }
 
-            /* OPTIMISATIONS SPÉCIFIQUES POUR IPHONE */
+        .gradient-text2 {
+            background:linear-gradient(45deg, #2ecc71, #27ae60, #16a085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        }
 
-            /* Styles pour iPhone et petits écrans */
-            @media (max-width: 480px) {
-                .hero-bg h1 {
-                    margin-top: 5%;
-                }
-                
-                /* Ajustement des tailles de texte pour iPhone */
-                .hero-bg h1 {
-                    font-size: 2.5rem !important; /* Plus petit que text-5xl */
-                }
-                
-                .gradient-text2 {
-                    font-size: 3rem !important; /* Plus petit que text-7xl */
-                    line-height: 1.1;
-                    margin-top: 0.5rem;
-                }
-                
-                .hero-bg h2 {
-                    font-size: 1.5rem !important; /* Plus petit que text-4xl */
-                    margin-bottom: 3rem !important;
-                }
-                
-                /* Boutons adaptés pour iPhone */
-                .hero-buttons {
-                    flex-direction: column;
-                    gap: 1rem;
-                    width: 100%;
-                    padding: 0 1rem;
-                }
-                
-                .hero-buttons button {
-                    width: 100%;
-                    padding: 1rem;
-                    font-size: 1rem;
-                    text-align: center;
-                }
-                
-                /* Statistiques adaptées */
-                .hero-stats {
-                    margin-top: 2rem;
-                    gap: 1.5rem;
-                    max-width: 100%;
-                }
-                
-                .hero-stats .stat-number {
-                    font-size: 1.875rem; /* Plus petit que text-3xl */
-                }
-                
-                .hero-stats .stat-label {
-                    font-size: 0.75rem;
-                }
-                
-                /* Indicateur de scroll adapté */
-                .scroll-indicator {
-                    bottom: 1rem;
-                    transform: scale(0.8);
-                }
+        .hero-bg {
+            background-image: url('1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Optimisation pour mobiles */
+            background-attachment: scroll; /* Évite les problèmes de performance sur iOS */
+        }
+
+        .hero-bg h1 {
+            margin-top: 10%; /* Réduit pour mobile */
+        }
+
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
             }
-            /* NOUVELLES RÈGLES POUR LA SECTION STATS - OPTIMISATION IPHONE */
-
-            /* Styles généraux pour la section stats */
-            .stats-section {
-                min-height: 140vh;
-                padding: 2rem 0;
-                    background-color: #000000; /* Fond noir comme l'original */
-                /* Ou utilisez votre couleur de fond habituelle */
+            40%, 43% {
+                transform: translate3d(0,-30px,0);
             }
+            70% {
+                transform: translate3d(0,-15px,0);
+            }
+            90% {
+                transform: translate3d(0,-4px,0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-100px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        
+
+        /* OPTIMISATIONS SPÉCIFIQUES POUR IPHONE */
+
+        /* Styles pour iPhone et petits écrans */
+        @media (max-width: 480px) {
+            .hero-bg h1 {
+                margin-top: 5%;
+            }
+            
+            /* Ajustement des tailles de texte pour iPhone */
+            .hero-bg h1 {
+                font-size: 2.5rem !important; /* Plus petit que text-5xl */
+            }
+            
+            .gradient-text2 {
+                font-size: 3rem !important; /* Plus petit que text-7xl */
+                line-height: 1.1;
+                margin-top: 0.5rem;
+            }
+            
+            .hero-bg h2 {
+                font-size: 1.5rem !important; /* Plus petit que text-4xl */
+                margin-bottom: 3rem !important;
+            }
+            
+            /* Boutons adaptés pour iPhone */
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+                padding: 0 1rem;
+            }
+            
+            .hero-buttons button {
+                width: 100%;
+                padding: 1rem;
+                font-size: 1rem;
+                text-align: center;
+            }
+            
+            /* Statistiques adaptées */
+            .hero-stats {
+                margin-top: 2rem;
+                gap: 1.5rem;
+                max-width: 100%;
+            }
+            
+            .hero-stats .stat-number {
+                font-size: 1.875rem; /* Plus petit que text-3xl */
+            }
+            
+            .hero-stats .stat-label {
+                font-size: 0.75rem;
+            }
+            
+            /* Indicateur de scroll adapté */
+            .scroll-indicator {
+                bottom: 1rem;
+                transform: scale(0.8);
+            }
+        }
+        /* NOUVELLES RÈGLES POUR LA SECTION STATS - OPTIMISATION IPHONE */
+
+        /* Styles généraux pour la section stats */
+        .stats-section {
+            min-height: 140vh;
+            padding: 2rem 0;
+                background-color: #000000; /* Fond noir comme l'original */
+            /* Ou utilisez votre couleur de fond habituelle */
+        }
 
 
             /* Styles du bouton retour en haut */
@@ -272,54 +708,138 @@
 </style>
 </head>
 
-<body class=" scroll-smooth min-h-screen bg-white">
+<body class="scroll-smooth min-h-screen bg-black">
     <!-- Toast for notifications -->
-    <div id="toast" class="toast">
-        <div id="toast-content"></div>
+    <div id="toast" class="toast"></div>
+
+    <div class="floating-elements">
+        <div class="floating-dot"></div>
+        <div class="floating-dot"></div>
+        <div class="floating-dot"></div>
     </div>
 
-    <!-- Header -->
-    <header class="absolute top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
-        <div class="container mx-1 px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <img src="logo png blanc.png" alt="Logo" class="h-16 w-16">
-                    <span class="text-2xl font-bold text-white">Col de L'EST</span>
-                </div>
-                
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-white/90 hover:text-white transition-colors">Accueil</a>
-                    <a href="Gallerie.html" class="text-white/90 hover:text-white transition-colors">Gallerie</a>
-                    <a href="Contact.html" class="text-white/90 hover:text-white transition-colors">Contact</a>
-                </nav>
-                
-                <div class="hidden md:flex items-center space-x-4">
-                    <button onclick="scrollToRegistration()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2 rounded-md transition-colors">
-                        S'inscrire pour notre prochain rally
-                    </button>
-                </div>
-                
-                <button id="mobile-menu-btn" class="md:hidden text-white">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-            
-            <div id="mobile-menu" class="mobile-menu md:hidden mt-4 pb-4 border-t border-white/10 pt-4">
-                <nav class="flex flex-col space-y-4">
-                    <a href="index.html" class="text-white/90 hover:text-white transition-colors">Evènements</a>
-                    <a href="Gallerie.html" class="text-white/90 hover:text-white transition-colors">Gallerie</a>
-                    <a href="Contact.html" class="text-white/90 hover:text-white transition-colors">Contact</a>
-                    <div class="pt-4">
-                        <button onclick="scrollToRegistration()" class="bg-emerald-700 hover:bg-red-700 text-white w-full py-2 rounded-md transition-colors">
-                            S'inscrire pour notre prochain Rallye
-                        </button>
-                    </div>
-                </nav>
+    <header class="floating-header">
+        <div class="header-left">
+            <div class="logo-container">
+                <img src="logo png blanc.png" alt="Logo">
+                <span class="logo-text">Col de L'EST</span>
             </div>
         </div>
+
+        <nav class="header-center nav-desktop">
+            <a href="index.html">Accueil</a>
+            <a href="Gallerie.html">Gallerie</a>
+            <a href="Contact.html">Contact</a>
+        </nav>
+
+        <div class="header-right">
+            <button class="cta-button bouton-desktop" onclick="scrollToRegistration()">
+                <svg class="cta-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1h.585a.5.5 0 0 1 .354.146l1.415 1.414A1.5 1.5 0 0 0 4.414 3h9.379a.5.5 0 0 1 .38.824l-2.597 3.08a.5.5 0 0 0 0 .641l2.597 3.08a.5.5 0 0 1-.38.824H4.414a1.5 1.5 0 0 0-1.06.44L1.94 13.94A.5.5 0 0 1 1.586 14H.5a.5.5 0 0 1-.5-.5v-12z"/>
+                </svg>
+                <span class="cta-text">S'inscrire pour notre prochain rally</span>
+            </button>
+
+            <button id="mobile-menu-btn" class="mobile-menu-btn">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="mobile-menu">
+            <nav class="mobile-nav">
+                <a href="index.html">Évènements</a>
+                <a href="Gallerie.html">Gallerie</a>
+                <a href="Contact.html">Contact</a>
+                <button class="cta-button bouton-mobile" onclick="scrollToRegistration()">
+                    S'inscrire pour notre prochain Rallye
+                </button>
+            </nav>
+        </div>
     </header>
+
+
+    
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const header = document.querySelector('.floating-header');
+        let isMenuOpen = false;
+
+        // Toggle du menu mobile avec animation
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            isMenuOpen = !isMenuOpen;
+            
+            mobileMenuBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            
+            // Empêcher le scroll du body quand le menu est ouvert
+            document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto';
+        });
+
+        // Fermer le menu en cliquant ailleurs
+        document.addEventListener('click', function(e) {
+            if (isMenuOpen && !header.contains(e.target)) {
+                isMenuOpen = false;
+                mobileMenuBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Fermer le menu lors du clic sur un lien
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                isMenuOpen = false;
+                mobileMenuBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // Mode discret lors du scroll
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', function() {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Fermer le menu mobile lors du scroll
+            if (isMenuOpen && Math.abs(currentScrollY - lastScrollY) > 50) {
+                isMenuOpen = false;
+                mobileMenuBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+
+        // Fonction placeholder pour l'inscription
+        function scrollToRegistration() {
+            alert('Redirection vers la page d\'inscription au rallye !');
+        }
+
+        // Gestion du redimensionnement de la fenêtre
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 945 && isMenuOpen) {
+                isMenuOpen = false;
+                mobileMenuBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
 
     <section class="hero-bg relative h-screen flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 bg-black/40"></div>
@@ -689,15 +1209,7 @@
 
     <!-- JavaScript -->
     <script>
-        // Fonction pour gérer le menu mobile
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const hamburgerIcon = document.getElementById('hamburger-icon');
-            
-            // Toggle de la classe active
-            mobileMenu.classList.toggle('active');
-            hamburgerIcon.classList.toggle('active');
-        }
+        
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
