@@ -788,17 +788,7 @@
         const header = document.querySelector('.floating-header');
         let isMenuOpen = false;
 
-        // Toggle du menu mobile avec animation
-        mobileMenuBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            isMenuOpen = !isMenuOpen;
-            
-            mobileMenuBtn.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-            
-            // Empêcher le scroll du body quand le menu est ouvert
-            document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto';
-        });
+        
 
         // Fermer le menu en cliquant ailleurs
         document.addEventListener('click', function(e) {
