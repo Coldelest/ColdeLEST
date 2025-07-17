@@ -883,7 +883,7 @@
                 <a href="index.html">Évènements</a>
                 <a href="Gallerie.html">Galerie</a>
                 <a href="Contact.html">Contact</a>
-                <button class="cta-button bouton-mobile" onclick="scrollToRegistration()">
+                <button class="cta-button bouton-mobile justify-center items-center" onclick="scrollToRegistration()">
                     S'inscrire pour notre prochain Rallye
                 </button>
             </nav>
@@ -958,6 +958,52 @@
                 document.body.style.overflow = 'auto';
             }
         });
+
+        // Fonction pour gérer le menu mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            
+            // Toggle de la classe active
+            mobileMenu.classList.toggle('active');
+            hamburgerIcon.classList.toggle('active');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            
+            // Clic sur le bouton hamburger
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMobileMenu();
+            });
+
+            // Fermer le menu quand on clique sur un lien
+            const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const hamburgerIcon = document.getElementById('hamburger-icon');
+                    mobileMenu.classList.remove('active');
+                    hamburgerIcon.classList.remove('active');
+                });
+            });
+
+            // Fermer le menu quand on clique ailleurs
+            document.addEventListener('click', function(e) {
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                
+                if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    const hamburgerIcon = document.getElementById('hamburger-icon');
+                    mobileMenu.classList.remove('active');
+                    hamburgerIcon.classList.remove('active');
+                }
+            });
+        });
+
     </script>
 
 

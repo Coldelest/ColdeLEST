@@ -91,7 +91,7 @@
                 0 20px 40px rgba(0, 0, 0, 0.3),
                 0 8px 16px rgba(0, 0, 0, 0.2),
                 0 0 0 1px rgba(255, 255, 255, 0.05);
-            animation: headerFloat 6s ease-in-out infinite;
+            
         }
 
         @keyframes headerFloat {
@@ -275,7 +275,7 @@
             left: 0;
             right: 0;
             
-            background-color: #3e4645cb;
+            background-color: #3b4442cb;
             backdrop-filter: blur(6px); /* optionnel : effet de flou derrière */
             -webkit-backdrop-filter: blur(6px); /* compatibilité Safari */
             
@@ -299,12 +299,11 @@
             z-index: 1000; /* 🔒 pour garantir qu’il passe au-dessus */
         }
 
-
         .mobile-menu.active {
             max-height: 300px;
             opacity: 1;
             transform: translateY(0);
-            padding: 20px;
+            padding: 5px 20px 20px 20px;
         }
 
         .mobile-nav {
@@ -971,9 +970,11 @@
     </script>
 </head>
 
-<body class="scroll-smooth min-h-screen bg-black">
+<body class=" scroll-smooth min-h-screen bg-white">
     <!-- Toast for notifications -->
-    <div id="toast" class="toast"></div>
+    <div id="toast" class="toast">
+        <div id="toast-content"></div>
+    </div>
 
     <div class="floating-elements">
         <div class="floating-dot"></div>
@@ -1017,7 +1018,7 @@
                 <a href="index.html">Évènements</a>
                 <a href="Gallerie.html">Galerie</a>
                 <a href="Contact.html">Contact</a>
-                <button class="cta-button bouton-mobile" onclick="scrollToRegistration()">
+                <button class="cta-button bouton-mobile justify-center items-center" onclick="scrollToRegistration()">
                     S'inscrire pour notre prochain Rallye
                 </button>
             </nav>
@@ -1025,8 +1026,10 @@
     </header>
 
 
+    
+
     <script>
-                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const header = document.querySelector('.floating-header');
         let isMenuOpen = false;
@@ -1093,6 +1096,52 @@
                 document.body.style.overflow = 'auto';
             }
         });
+
+        // Fonction pour gérer le menu mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            
+            // Toggle de la classe active
+            mobileMenu.classList.toggle('active');
+            hamburgerIcon.classList.toggle('active');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            
+            // Clic sur le bouton hamburger
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMobileMenu();
+            });
+
+            // Fermer le menu quand on clique sur un lien
+            const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const hamburgerIcon = document.getElementById('hamburger-icon');
+                    mobileMenu.classList.remove('active');
+                    hamburgerIcon.classList.remove('active');
+                });
+            });
+
+            // Fermer le menu quand on clique ailleurs
+            document.addEventListener('click', function(e) {
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                
+                if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    const hamburgerIcon = document.getElementById('hamburger-icon');
+                    mobileMenu.classList.remove('active');
+                    hamburgerIcon.classList.remove('active');
+                }
+            });
+        });
+
     </script>
 
     
