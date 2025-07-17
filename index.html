@@ -1284,37 +1284,46 @@
         }
 
         // Registration form submission
-        document.getElementById('registration-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Empêche le rechargement de la page
+document.getElementById('registration-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Empêche le rechargement de la page
 
-            const formData = new FormData(this);
-            const firstName = formData.get('firstName');
-            const lastName = formData.get('lastName');
-            const email = formData.get('email');
+    const formData = new FormData(this);
+    const firstName = formData.get('firstName');
+    const lastName = formData.get('lastName');
+    const email = formData.get('email');
 
-            // On teste bien les bonnes variables ici :
-            if (firstName && lastName && email) {
-                fetch('https://formspree.io/f/mrbkgqpp', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                }).then(response => {
-                    if (response.ok) {
-                        showToast('Intérêt signalé!', "Nous reviendrons vers vous très prochainement pour vous communiquer les informations sur la prochaine édition!");
-                        this.reset(); // Nettoie le formulaire
-                    } else {
-                        showToast("Erreur", "Une erreur s'est produite. Merci de réessayer.");
-                    }
-                }).catch(error => {
-                    console.error(error);
-                    showToast("Erreur", "Impossible d'envoyer le formulaire.");
-                });
-            } else {
-                showToast("Champs manquants", "Merci de remplir tous les champs requis.");
-            }
-        });
+    const recaptchaResponse = grecaptcha.getResponse();
+
+    if (!recaptchaResponse) {
+        showToast("reCAPTCHA manquant", "Merci de valider le reCAPTCHA avant de soumettre le formulaire.");
+        return;
+    }
+
+    // On teste bien les bonnes variables ici :
+        if (firstName && lastName && email) {
+            fetch('https://formspree.io/f/mrbkgqpp', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    showToast('Intérêt signalé!', "Nous reviendrons vers vous très prochainement pour vous communiquer les informations sur la prochaine édition!");
+                    this.reset(); // Nettoie le formulaire
+                    grecaptcha.reset(); // Réinitialise le reCAPTCHA
+                } else {
+                    showToast("Erreur", "Une erreur s'est produite. Merci de réessayer.");
+                }
+            }).catch(error => {
+                console.error(error);
+                showToast("Erreur", "Impossible d'envoyer le formulaire.");
+            });
+                } else {
+                    showToast("Champs manquants", "Merci de remplir tous les champs requis.");
+                }
+            });
+
 
 
         // Newsletter form submission
