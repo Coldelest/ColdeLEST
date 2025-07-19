@@ -6,19 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Col de L'EST - Roulez, Balade automobile</title>
     <meta name="description" content="Site officiel du Col de l'Est, passion rallye, courses et communauté.">
-    <link rel="icon" src="logo png blanc.png" type="image/png">
-    <meta property="og:image" img src="logo png blanc.png">
+      <!-- 1. Favicon pour navigateurs -->
+  <!-- Pensez à percent-encoder les espaces dans le nom de fichier -->
+  <link rel="icon" href="/assets/logo%20png%20blanc.png" type="image/png">
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Col de l'EST",
-        "url": "https://coldelest.fr",
-        "logo": "https://coldelest.fr/images/logo-blanc-carre.png"
-    }
-    </script>
+  <!-- 2. Icône pour iOS (ajout à l'écran d'accueil) -->
+  <link rel="apple-touch-icon" href="/assets/logo%20png%20blanc.png">
 
+  <!-- 3. Structured Data JSON-LD pour Google (Knowledge Graph) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Nom de Votre Organisation",
+    "url": "https://www.votresite.fr",
+    "logo": "https://www.votresite.fr/assets/logo%20png%20blanc.png"
+  }
+  </script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
